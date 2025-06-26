@@ -24,6 +24,22 @@ public SIGHTING(String sightingid, String speciesName, String location, String d
 public void setSightingid(String sightingid) {
     this.sightingid = sightingid;
 }
+public void setSpeciesName(String speciesName) {
+    this.speciesName = speciesName;
+}
+public void setLocation(String location) {
+    this.location = location;
+}
+public void setDateSpotted(String dateSpotted) {
+    this.dateSpotted = dateSpotted;
+}
+public void setObserverName(String observerName) {
+    this.observerName = observerName;
+}
+public void setCriticallyEndangered(boolean criticallyEndangered) {
+    this.criticallyEndangered = criticallyEndangered;
+}
+
 
 
 
@@ -47,8 +63,8 @@ public String getObserverName(){
     return observerName;
 }
 
-public String getisCriticallyEndangered(){
-    return criticallyEndangered ? "Yes" : "No";
+public boolean getisCriticallyEndangered(){
+    return criticallyEndangered;
 }
     
 public String toString(){
