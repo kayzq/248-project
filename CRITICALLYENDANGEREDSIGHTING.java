@@ -26,8 +26,11 @@ public boolean isRescued() {
 }
     
 public String toString() {
-    return super.toString() + 
-           "Monitoring Frequency: " + monitoringFrequency + "\n" +
-           "Rescued: " + (rescued ? "Yes" : "No") + "\n";
+    return super.toString() + String.format(
+        " %-19s  %-7s \n",
+        monitoringFrequency,
+        rescued 
+    );
 }
+
 }

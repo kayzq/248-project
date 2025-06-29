@@ -63,18 +63,22 @@ public String getObserverName(){
     return observerName;
 }
 
-public boolean getisCriticallyEndangered(){
+public boolean isCriticallyEndangered(){
     return criticallyEndangered;
 }
     
-public String toString(){
-    return "Sighting ID: " + sightingid + "\n" +
-           "Species Name: " + speciesName + "\n" +
-           "Location: " + location + "\n" +
-           "Date Spotted: " + dateSpotted + "\n" +
-           "Observer Name: " + observerName + "\n" +
-           "Critically Endangered: " + getisCriticallyEndangered() + "\n";
+public String toString() {
+    return String.format(
+        " %-10s %-24s  %-20s  %-12s  %-12s  %-20s ",
+        sightingid,
+        speciesName,
+        location,
+        dateSpotted,
+        observerName,
+        isCriticallyEndangered()
+    );
 }
+
 
 
 }

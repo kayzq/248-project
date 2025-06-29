@@ -14,7 +14,7 @@
 014,Sun Parakeet,Kalimantan Forest,2024-04-03,Shafiq,false 
 015,Dhole (Wild Dog),Perlis State Park,2024-02-20,Zara,false 
 016,Asian Arowana,Kelantan River,2024-05-01,Firdaus,true 
-017,Malayan Peacock-Pheasant,Fraser’s Hill,2024-01-11,Hafiza,false 
+017,Malayan Peacock-Pheasant,Fraser Hill,2024-01-11,Hafiza,false 
 018,White-Handed Gibbon,Penang National Park,2024-03-14,Adrian,false 
 019,Asian Tapir,Kenaboi Forest,2024-04-29,Aqil,false 
 020,Leatherback Turtle,Terengganu Coast,2024-02-07,Farah,true 

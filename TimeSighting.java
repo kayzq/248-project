@@ -36,12 +36,14 @@ public class TimeSighting extends SIGHTING {
     }
 
 
-    @Override
+   
     public String toString() {
-        return super.toString() + 
-               "Time Spotted: " + timeSpotted + "\n" +
-               "Nocturnal: " + (nocturnal ? "Yes" : "No") + "\n" +
-               "Sighting Duration: " + sightingDuration + " hours\n";
+        return super.toString() + String.format(
+               " %-12.2f  %-12s  %-7.2f \n",
+            timeSpotted,
+            nocturnal ,
+            sightingDuration
+            );
     }
 
     

@@ -1,0 +1,7 @@
+002,Orangutan,Sabah Forest Reserve,2024-02-03,Daniel,true,Monthly,false
+004,Helmeted Hornbill,Royal Belum,2024-01-30,James,true,Monthly,false
+007,Proboscis Monkey,Bako National Park,2024-02-18,Sarah,true,Monthly,false
+010,Slow Loris,Sarawak,2024-04-19,Hana,true,Monthly,false
+013,Asian Elephant,Belum-Temengor,2024-02-14,Yasmin,true,Monthly,false
+016,Asian Arowana,Kelantan River,2024-05-01,Firdaus,true,Monthly,false
+020,Leatherback Turtle,Terengganu Coast,2024-02-07,Farah,true,Monthly,false

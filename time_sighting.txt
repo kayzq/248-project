@@ -1,0 +1,20 @@
+001,Tiger,Endau-Rompin,2024-01-15,Aisyah,false,2.54,false,2.8
+002,Orangutan,Sabah Forest Reserve,2024-02-03,Daniel,true,11.4,true,1.6
+003,Tapir,Taman Negara,2024-03-21,Fatimah,false,21.14,false,1.6
+004,Helmeted Hornbill,Royal Belum,2024-01-30,James,true,7.1,true,4.4
+005,Malayan Sun Bear,Kenyir Forest,2024-03-02,Nurul,false,13.52,true,1.1
+006,Clouded Leopard,Gunung Mulu,2024-04-11,Arif,false,21.24,true,1.8
+007,Proboscis Monkey,Bako National Park,2024-02-18,Sarah,true,15.01,true,3.2
+008,Bornean Gibbon,Sabah Highlands,2024-05-08,Imran,false,0.12,false,4.7
+009,Leopard Cat,Lambir Hills,2024-01-25,Nadia,false,20.39,true,3.7
+010,Slow Loris,Sarawak,2024-04-19,Hana,true,18.13,true,2.7
+011,Horned Frog,Cameron Highlands,2024-01-05,Rafiq,false,15.13,true,1.1
+012,King Cobra,Langkawi Forest,2024-03-27,Farid,false,23.42,true,4.0
+013,Asian Elephant,Belum-Temengor,2024-02-14,Yasmin,true,11.37,true,4.9
+014,Sun Parakeet,Kalimantan Forest,2024-04-03,Shafiq,false,1.2,true,2.4
+015,Dhole (Wild Dog),Perlis State Park,2024-02-20,Zara,false,23.43,true,1.7
+016,Asian Arowana,Kelantan River,2024-05-01,Firdaus,true,22.13,true,4.5
+017,Malayan Peacock-Pheasant,Fraser Hill,2024-01-11,Hafiza,false,5.42,true,1.7
+018,White-Handed Gibbon,Penang National Park,2024-03-14,Adrian,false,1.13,true,0.8
+019,Asian Tapir,Kenaboi Forest,2024-04-29,Aqil,false,10.32,true,4.8
+020,Leatherback Turtle,Terengganu Coast,2024-02-07,Farah,true,3.24,true,1.7
