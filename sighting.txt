@@ -17,4 +17,4 @@
 017,Malayan Peacock-Pheasant,Fraser Hill,2024-01-11,Hafiza,false 
 018,White-Handed Gibbon,Penang National Park,2024-03-14,Adrian,false 
 019,Asian Tapir,Kenaboi Forest,2024-04-29,Aqil,false 
-020,Leatherback Turtle,Terengganu Coast,2024-02-07,Farah,true 
+020,Leatherback Turtle,Terengganu Coast,2024-02-07,Farah,true

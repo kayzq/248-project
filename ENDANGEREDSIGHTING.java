@@ -27,8 +27,8 @@ public int getPopulationEstimate() {
 }
 
 public String toString() {
-    return super.toString() + 
-           "Threat Level: " + threatLevel + "\n" +
-           "Population Estimate: " + populationEstimate + "\n";
+    return super.toString() + String.format(" %-19s  %-7d \n",
+            threatLevel  ,
+          populationEstimate );
 }
 }

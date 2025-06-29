@@ -76,7 +76,7 @@ public class main {
         String read = null;
         StringTokenizer st;
         try {
-            in = new BufferedReader(new FileReader("sighting.txt"));
+            in = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\GitHub\\248-project\\sighting.txt"));
             while ((read = in.readLine()) != null) {
                 st = new StringTokenizer(read, ",");
                 String sightingId = st.nextToken().trim();
@@ -104,7 +104,7 @@ public class main {
             LinkedList sightingList = getSightingInfo();
             LinkedList criticallyEndangeredList = getCriticallyEndangeredInfo();
             criticallyEndangeredList = filterCriticallyEndangeredFromSightings(sightingList);
-            LinkedList endangeredSpeciesSightingList = new LinkedList();//tukar
+            LinkedList endangeredSpeciesSightingList = filterEndangeredFromSightings(sightingList);//tukar
             Queue TimeSightingQueue = autoFillTimeSighting(sightingList);
 
             for (;;) {
@@ -225,21 +225,77 @@ public class main {
                         int submenu3 = EndangeredSpeciesSightingManagementSystem(input);
                         switch (submenu3) {
                             case 1:
-                                // Handle adding a rescue information
+    
+                                ENDANGEREDSIGHTING esighting = newEndangeredSighting(input);
+                                writeNewEndangeredSighting(esighting);
+                                endangeredSpeciesSightingList.insertAtBack(esighting);
+                                System.out.println("Data added successfully!");
+
                                 break;
                             case 2:
-                                // Handle viewing time of sightings
+                                System.out.println("\n\nEndangered Species Sighting Management - Search species");
+                                System.out.println("------------------------------------------------");
+                                input.nextLine();
+                                System.out.print("Enter species id to search: ");
+                                String searchID = input.nextLine();
+                                searchEndangeredSighting(endangeredSpeciesSightingList, searchID);
                                 break;
+                                // Handle viewing time of sightings
                             case 3:
+                                System.out.println("\n\nEndangered Species Sighting Management - Delete species");
+                                System.out.println("------------------------------------------------");
+                                input.nextLine();
+                                System.out.print("Enter sighting id to delete: ");
+                                String sightingID = input.nextLine();
+                                ENDANGEREDSIGHTING es;
+                                LinkedList tempES = new LinkedList();
+                                if (endangeredSpeciesSightingList == null)
+                                    System.out.println("No data found");
+                                else {
+                                    Object data = endangeredSpeciesSightingList.getFirst();
+                                    while (data != null) {
+                                        es = (ENDANGEREDSIGHTING) data;
+                                        if (es.getSightingid().equals(sightingID)) {
+                                            System.out.println(
+                                                    "Sighting with ID " + sightingID + " deleted successfully.");
+                                        } else {
+                                            tempES.insertAtBack(data);
+                                        }
+                                        data = endangeredSpeciesSightingList.getNext();
+                                        endangeredSpeciesSightingList.removeFromFront();
+                                    }
+                                }
+                                endangeredSpeciesSightingList = tempES;
+                                if (tempES == null)
+                                    System.out.println("No data found");
+                                else {
+                                    Object data = tempES.getFirst();
+                                    while (data != null) {
+                                        es = (ENDANGEREDSIGHTING) data;
+                                        endangeredSpeciesSightingList.insertAtBack(es);
+                                        data = tempES.getNext();
+                                        tempES.removeFromFront();
+                                    }
+                                }
                                 // Handle updating a time of sighting
                                 break;
                             case 4:
+                                System.out.println("\n\nEndangered Species Sighting Management - List Sightings");
+                                System.out.println("------------------------------------------------");
+                                System.out.println(
+                                        "Sighting ID | Species Name          | Location             | Date Spotted|Observer Name|Critically Endangered|Threat Level|Population Estimate");
+                                System.out.print(PrintEndangered(endangeredSpeciesSightingList));
+                                // Handle sorting a time of sighting
                                 // Handle deleting a time of sighting
                                 break;
                             case 5:
+                               sortByNameENDANGERED(endangeredSpeciesSightingList);
                                 // Back to main menu
                                 break;
                             case 6:
+                                input.nextLine();
+                                System.out.println("\nReturning to main menu...");
+                                // Back to main menu
                                 break;
                             default:
                                 System.out.println("Invalid option. Please try again.");
@@ -350,7 +406,7 @@ public class main {
 
     static LinkedList getCriticallyEndangeredInfo() {
         LinkedList list = new LinkedList();
-        try (BufferedReader br = new BufferedReader(new FileReader("critically_endangered.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\GitHub\\248-project\\critically_endangered.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -369,7 +425,7 @@ public class main {
     }
     static Queue getTimeInfo() {
     Queue queue = new Queue();
-    try (BufferedReader br = new BufferedReader(new FileReader("sighting.txt"))) {
+    try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\GitHub\\248-project\\sighting.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
             String[] parts = line.split(",");
@@ -624,4 +680,178 @@ public class main {
     return totalDuration; // Return total duration
     }
 
+    static void writeNewEndangeredSighting(ENDANGEREDSIGHTING data) {
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("endangered_sighting.txt", true)))) {
+            writer.println(
+                data.getSightingid() + "," +
+                data.getSpeciesName() + "," +
+                data.getLocation() + "," +
+                data.getDateSpotted() + "," +
+                data.getObserverName() + "," +
+                data.isCriticallyEndangered()
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void searchEndangeredSighting(LinkedList list, String searchID) {
+        String out = "";
+        ENDANGEREDSIGHTING es;
+        boolean found = false;
+        if (list == null)
+            out += "No data found";
+        else {
+            Object data = list.getFirst();
+            while (data != null) {
+                es = (ENDANGEREDSIGHTING) data;
+                if (es.getSightingid().equals(searchID)) {
+                    out += es.toString();
+                    found = true;
+                }
+                data = list.getNext();
+            }
+        }
+        if (!found) {
+            System.out.println("No data found for Sighting ID: " + searchID);
+        } else {
+            System.out.println(out);
+        }
+    }
+
+    static ENDANGEREDSIGHTING newEndangeredSighting(Scanner in) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Endangered Species Sighting Management - Add New Sighting");
+        System.out.println("------------------------------------------------");
+        System.out.print("Enter sighting ID:  ");
+        String sightingId = input.nextLine();
+        System.out.print("Enter species name: ");
+        String speciesName = input.nextLine();
+        System.out.print("Enter location: ");
+        String location = input.nextLine();
+        System.out.print("Enter date spotted (dd/mm/yyyy): ");
+        String dateSpotted = input.nextLine();
+        System.out.print("Enter observer name: ");
+        String observerName = input.nextLine();
+        System.out.print("Is the species critically endangered? (true/false): ");
+        boolean criticallyEndangered = input.nextBoolean();
+        System.out.println("Enter threat level: ");
+        String threatLevel = input.next();
+        System.out.println("Enter population estimate: ");
+        int populationEstimate = input.nextInt();
+    
+
+        ENDANGEREDSIGHTING data = new ENDANGEREDSIGHTING(sightingId, speciesName, location, dateSpotted, observerName, criticallyEndangered, threatLevel, populationEstimate);
+
+        return data;
+    }
+    
+    static LinkedList getEndangeredSightingInfo() {
+        LinkedList list = new LinkedList();
+        try (BufferedReader br = new BufferedReader(new FileReader("endangered_sighting.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 6) {
+                    ENDANGEREDSIGHTING es = new ENDANGEREDSIGHTING(
+                        parts[0].trim(), parts[1].trim(), parts[2].trim(), parts[3].trim(),
+                        parts[4].trim(), Boolean.parseBoolean(parts[5].trim()), "", 0
+                    );
+                    list.insertAtBack(es);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+}
+        return list;
+    }
+    
+    static LinkedList filterEndangeredFromSightings(LinkedList sightingList) {
+        LinkedList endangeredList = new LinkedList();
+        if (sightingList == null) {
+            return endangeredList;
+        }
+        Object data = sightingList.getFirst();
+        while (data != null) {
+            SIGHTING sighting = (SIGHTING) data;
+            if (!sighting.isCriticallyEndangered()) {
+                ENDANGEREDSIGHTING es = new ENDANGEREDSIGHTING(
+                    sighting.getSightingid(),
+                    sighting.getSpeciesName(),
+                    sighting.getLocation(),
+                    sighting.getDateSpotted(),
+                    sighting.getObserverName(),
+                    sighting.isCriticallyEndangered(),
+                    "Unknown",
+                    0
+                );
+                endangeredList.insertAtBack(es);
+            }
+            data = sightingList.getNext();
+        }
+        return endangeredList;
+    }
+
+    public static String PrintEndangered(LinkedList list) {
+        String out = "";
+        ENDANGEREDSIGHTING es;
+        if (list == null)
+            out += "No data found";
+        else {
+            Object data = list.getFirst();
+            while (data != null) {
+                es = (ENDANGEREDSIGHTING) data;
+                out += es.toString();
+                data = list.getNext();
+            }
+        }
+        return out;
+    }
+
+
+    static void sortByNameENDANGERED(LinkedList list) {
+    if (list == null || list.getFirst() == null) {
+        System.out.println("No data to sort.");
+        return;
+    }
+
+    ArrayList<ENDANGEREDSIGHTING> tempList = new ArrayList<>();
+    Object current = list.getFirst();
+
+    while (current != null) {
+        tempList.add((ENDANGEREDSIGHTING) current);
+        current = list.getNext();
+    }
+
+    // Bubble sort based on species name
+    for (int i = 0; i < tempList.size() - 1; i++) {
+        for (int j = 0; j < tempList.size() - i - 1; j++) {
+            String name1 = tempList.get(j).getSpeciesName();
+            String name2 = tempList.get(j + 1).getSpeciesName();
+
+            if (name1.compareToIgnoreCase(name2) > 0) {
+                // Swap
+                ENDANGEREDSIGHTING temp = tempList.get(j);
+                tempList.set(j, tempList.get(j + 1));
+                tempList.set(j + 1, temp);
+            }
+        }
+    }
+
+    // Clear original list and re-insert sorted items
+    while (list.getFirst() != null) {
+        list.removeFromFront();
+    }
+
+    for (ENDANGEREDSIGHTING ce : tempList) {
+        list.insertAtBack(ce);
+    }
+
+    System.out.println("Species sorted alphabetically by name .");
+    }
+
+
+
+    
 }
