@@ -2,7 +2,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -96,7 +95,7 @@ public class mainQueue {
             Queue criticallyEndangeredQueue = getCriticallyEndangeredInfo();
             criticallyEndangeredQueue = filterCriticallyEndangeredFromSightings(sightingQueue);
             Queue endangeredSpeciesSightingQueue = filterEndangeredFromSightings(sightingQueue);
-            Queue TimeSightingQueue = autoFillTimeSighting(sightingQueue);
+            Queue TimeSightingQueue = getTimeInfo();
 
             for (;;) {
                 mainmenu();
@@ -387,37 +386,34 @@ public class mainQueue {
         return queue;
     }
 
-    static Queue autoFillTimeSighting(Queue sightingQueue) {
-        Queue timeQueue = new Queue();
-        Queue tempQueue = new Queue();
-        Random rand = new Random();
+    static Queue getTimeInfo() {
+    Queue queue = new Queue();
+    try (BufferedReader br = new BufferedReader(new FileReader("time_sighting.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] parts = line.split(",");
+            if (parts.length == 9) {
+                String sightingId = parts[0].trim();
+                String speciesName = parts[1].trim();
+                String location = parts[2].trim();
+                String dateSpotted = parts[3].trim();
+                String observerName = parts[4].trim();
+                boolean criticallyEndangered = Boolean.parseBoolean(parts[5].trim());
+                double timeSpotted = Double.parseDouble(parts[6].trim());
+                boolean nocturnal = Boolean.parseBoolean(parts[7].trim());
+                double sightingDuration = Double.parseDouble(parts[8].trim());
 
-        while (!sightingQueue.isEmpty()) {
-            SIGHTING s = (SIGHTING) sightingQueue.dequeue();
-            tempQueue.enqueue(s);
-
-            int hour = rand.nextInt(24);
-            int minute = rand.nextInt(60);
-            double timeSpotted = hour + (minute / 100.0);
-            boolean nocturnal = rand.nextBoolean();
-            double duration = Math.round((0.5 + rand.nextDouble() * 4.5) * 10.0) / 10.0;
-
-            TimeSighting ts = new TimeSighting(
-                s.getSightingid(), s.getSpeciesName(), s.getLocation(),
-                s.getDateSpotted(), s.getObserverName(), s.isCriticallyEndangered(),
-                timeSpotted, nocturnal, duration
-            );
-
-            writeNewTime(ts);
-            timeQueue.enqueue(ts);
+                TimeSighting ts = new TimeSighting(
+                    sightingId, speciesName, location, dateSpotted, observerName,
+                    criticallyEndangered, timeSpotted, nocturnal, sightingDuration
+                );
+                queue.enqueue(ts);
+            }
         }
-
-        // Restore original queue
-        while (!tempQueue.isEmpty()) {
-            sightingQueue.enqueue(tempQueue.dequeue());
+        } catch (IOException e) {
+        e.printStackTrace();
         }
-
-        return timeQueue;
+    return queue;
     }
 
     static void deleteFileCE(Queue CE) {
