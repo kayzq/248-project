@@ -231,7 +231,7 @@ public class mainQueue {
                                         }
                                     }
                                 }
-                                endangeredSpeciesSightingQueue = tempES;
+                                
                                 if (tempES.isEmpty())
                                     System.out.println("No data found");
                                 else {
