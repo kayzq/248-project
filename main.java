@@ -7,13 +7,6 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class main {
-    public static void clrscr() throws Exception { // method to return screen back to main menu
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("\n<< Press ENTER to continue >> ");
-        sc.nextLine();
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-    }
 
     static void mainmenu() {
         System.out.println("\n\nWelcome to Endangered Species Management System");
@@ -76,7 +69,7 @@ public class main {
         String read = null;
         StringTokenizer st;
         try {
-            in = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\GitHub\\248-project\\sighting.txt"));
+            in = new BufferedReader(new FileReader("sighting.txt"));
             while ((read = in.readLine()) != null) {
                 st = new StringTokenizer(read, ",");
                 String sightingId = st.nextToken().trim();
@@ -104,7 +97,7 @@ public class main {
             LinkedList sightingList = getSightingInfo();
             LinkedList criticallyEndangeredList = getCriticallyEndangeredInfo();
             criticallyEndangeredList = filterCriticallyEndangeredFromSightings(sightingList);
-            LinkedList endangeredSpeciesSightingList = filterEndangeredFromSightings(sightingList);//tukar
+            LinkedList endangeredSpeciesSightingList = filterEndangeredFromSightings(sightingList);
             Queue TimeSightingQueue = autoFillTimeSighting(sightingList);
 
             for (;;) {
@@ -167,7 +160,7 @@ public class main {
                                         tempCE.removeFromFront();
                                     }
                                 }
-                                System.out.println("Sighting with ID " + SightingID + " deleted successfully.");
+                                
                                 deleteFileCE(criticallyEndangeredList);
                                 
                                 break;
@@ -265,7 +258,7 @@ public class main {
                                         endangeredSpeciesSightingList.removeFromFront();
                                     }
                                 }
-                                endangeredSpeciesSightingList = tempES;
+                               
                                 if (tempES == null)
                                     System.out.println("No data found");
                                 else {
@@ -277,7 +270,7 @@ public class main {
                                         tempES.removeFromFront();
                                     }
                                 }
-                                // Handle updating a time of sighting
+                               deleteFileES(endangeredSpeciesSightingList);
                                 break;
                             case 4:
                                 System.out.println("\n\nEndangered Species Sighting Management - List Sightings");
@@ -406,7 +399,7 @@ public class main {
 
     static LinkedList getCriticallyEndangeredInfo() {
         LinkedList list = new LinkedList();
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\GitHub\\248-project\\critically_endangered.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("critically_endangered.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -519,6 +512,43 @@ public class main {
                     e.printStackTrace();
                 }
                 data = CE.getNext();
+            }
+        }
+    }
+
+    static void deleteFileES(LinkedList ES) {
+        ENDANGEREDSIGHTING es;
+        try {
+            Files.deleteIfExists(Paths.get("endangered_sighting.txt"));
+        } catch (Exception e) {
+        }
+        File file = new File("endangered_sighting.txt");
+
+        try {
+            boolean value = file.createNewFile();
+            if (value) {
+                System.out.println("New file created successfully.");
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (ES == null) {
+            System.out.println("List is empty, nothing to write.");
+        } else {
+            Object data = ES.getFirst();
+            while (data != null) {
+                es = (ENDANGEREDSIGHTING) data;
+                try (PrintWriter writeES = new PrintWriter(
+                        new BufferedWriter(new FileWriter("endangered_sighting.txt", true)))) {
+                    writeES.println(es.getSightingid() + "," + es.getSpeciesName() + "," + es.getLocation() + ","
+                            + es.getDateSpotted() + "," + es.getObserverName() + "," + es.isCriticallyEndangered());
+                    writeES.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                data = ES.getNext();
             }
         }
     }
@@ -850,8 +880,5 @@ public class main {
 
     System.out.println("Species sorted alphabetically by name .");
     }
-
-
-
     
 }
