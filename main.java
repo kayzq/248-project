@@ -2,7 +2,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -98,7 +97,7 @@ public class main {
             LinkedList criticallyEndangeredList = getCriticallyEndangeredInfo();
             criticallyEndangeredList = filterCriticallyEndangeredFromSightings(sightingList);
             LinkedList endangeredSpeciesSightingList = filterEndangeredFromSightings(sightingList);
-            Queue TimeSightingQueue = autoFillTimeSighting(sightingList);
+            Queue TimeSightingQueue = getTimeInfo();
 
             for (;;) {
                 mainmenu();
@@ -418,7 +417,7 @@ public class main {
     }
     static Queue getTimeInfo() {
     Queue queue = new Queue();
-    try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\LENOVO\\Documents\\GitHub\\248-project\\sighting.txt"))) {
+    try (BufferedReader br = new BufferedReader(new FileReader("time_sighting.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
             String[] parts = line.split(",");
@@ -445,38 +444,6 @@ public class main {
         }
     return queue;
     }
-
-   static Queue autoFillTimeSighting(LinkedList sightingList) {
-        Queue queue = new Queue();
-        Object data = sightingList.getFirst();
-        Random rand = new Random();
-
-        while (data != null) {
-            SIGHTING s = (SIGHTING) data;
-
-            int hour = rand.nextInt(24);     // 0–23
-            int minute = rand.nextInt(60);   // 0–59
-
-            // Convert to HH.mm format (e.g., 13.45 means 13:45)
-            double timeSpotted = hour + (minute / 100.0);
-
-            boolean nocturnal = rand.nextBoolean();
-            double duration = Math.round((0.5 + rand.nextDouble() * 4.5) * 10.0) / 10.0;
-
-            TimeSighting ts = new TimeSighting(
-                s.getSightingid(), s.getSpeciesName(), s.getLocation(),
-                s.getDateSpotted(), s.getObserverName(), s.isCriticallyEndangered(),
-                timeSpotted, nocturnal, duration
-            );
-
-            writeNewTime(ts);
-            queue.enqueue(ts);
-            data = sightingList.getNext();
-        }
-
-        return queue;
-    }
-
 
     static void deleteFileCE(LinkedList CE) {
         CRITICALLYENDANGEREDSIGHTING ce;
