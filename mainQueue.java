@@ -1,7 +1,6 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -576,40 +575,117 @@ public class mainQueue {
         return out;
     }
 
+     public static String PrintEndangered(Queue queue) {
+        String out = "";
+        ENDANGEREDSIGHTING es;
+        Queue tempQueue = new Queue();
+        
+        if (queue.isEmpty())
+            out += "No data found";
+        else {
+            while (!queue.isEmpty()) {
+                es = (ENDANGEREDSIGHTING) queue.dequeue();
+                out += es.toString();
+                tempQueue.enqueue(es);
+            }
+            
+            // Restore original queue
+            while (!tempQueue.isEmpty()) {
+                queue.enqueue(tempQueue.dequeue());
+            }
+        }
+        return out;
+    }
+
     static void sortByName(Queue queue) {
-        if (queue.isEmpty()) {
-            System.out.println("No data to sort.");
-            return;
+    if (queue.isEmpty()) {
+        System.out.println("No data to sort.");
+        return;
+    }
+
+    int n = 0;
+    Queue temp = new Queue();
+
+    // First, count the number of items
+    while (!queue.isEmpty()) {
+        temp.enqueue(queue.dequeue());
+        n++;
+    }
+
+    // Restore the queue
+    while (!temp.isEmpty()) {
+        queue.enqueue(temp.dequeue());
+    }
+
+    // Bubble sort using queue operations
+    for (int i = 0; i < n - 1; i++) {
+        CRITICALLYENDANGEREDSIGHTING prev = (CRITICALLYENDANGEREDSIGHTING) queue.dequeue();
+        for (int j = 0; j < n - 1; j++) {
+            CRITICALLYENDANGEREDSIGHTING current = (CRITICALLYENDANGEREDSIGHTING) queue.dequeue();
+
+            String name1 = prev.getSpeciesName();
+            String name2 = current.getSpeciesName();
+
+            // Compare species names (case-insensitive)
+            if (name1.compareToIgnoreCase(name2) < 0) {
+                queue.enqueue(prev); // Swap
+                prev = current;
+            } else {
+                queue.enqueue(current); // Keep order
+            }
         }
+        // Enqueue the largest (or correct) item at the end of this pass
+        queue.enqueue(prev);
+    }
+    System.out.println("Species sorted alphabetically using queue only.");
+    }
 
-        // Convert queue to array for easier sorting
-        ArrayList<CRITICALLYENDANGEREDSIGHTING> tempList = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            tempList.add((CRITICALLYENDANGEREDSIGHTING) queue.dequeue());
-        }
 
-        // Bubble sort based on species name
-        for (int i = 0; i < tempList.size() - 1; i++) {
-            for (int j = 0; j < tempList.size() - i - 1; j++) {
-                String name1 = tempList.get(j).getSpeciesName();
-                String name2 = tempList.get(j + 1).getSpeciesName();
+    static void sortByNameENDANGERED(Queue queue) {
+    if (queue.isEmpty()) {
+        System.out.println("No data to sort.");
+        return;
+    }
 
-                if (name1.compareToIgnoreCase(name2) > 0) {
-                    // Swap
-                    CRITICALLYENDANGEREDSIGHTING temp = tempList.get(j);
-                    tempList.set(j, tempList.get(j + 1));
-                    tempList.set(j + 1, temp);
-                }
+    int n = 0;
+    Queue temp = new Queue();
+
+    // Count total elements
+    while (!queue.isEmpty()) {
+        temp.enqueue(queue.dequeue());
+        n++;
+    }
+
+    // Restore original queue
+    while (!temp.isEmpty()) {
+        queue.enqueue(temp.dequeue());
+    }
+
+    // Perform bubble sort using only queue operations
+    for (int i = 0; i < n - 1; i++) {
+        ENDANGEREDSIGHTING prev = (ENDANGEREDSIGHTING) queue.dequeue();
+        for (int j = 0; j < n - 1; j++) {
+            ENDANGEREDSIGHTING current = (ENDANGEREDSIGHTING) queue.dequeue();
+
+            String name1 = prev.getSpeciesName();
+            String name2 = current.getSpeciesName();
+
+            if (name1.compareToIgnoreCase(name2) < 0) {
+                // Swap
+                queue.enqueue(prev);
+                prev = current;
+            } else {
+                queue.enqueue(current);
             }
         }
 
-        // Rebuild the queue with sorted items
-        for (CRITICALLYENDANGEREDSIGHTING ce : tempList) {
-            queue.enqueue(ce);
-        }
-
-        System.out.println("Species sorted alphabetically by name.");
+        // Enqueue the largest/last compared item
+        queue.enqueue(prev);
     }
+
+    System.out.println("Endangered species sorted alphabetically using queue only.");
+    }
+
 
     static double calcavg(Queue queue) {
         if (queue.isEmpty()) {
@@ -782,59 +858,7 @@ public class mainQueue {
         return endangeredQueue;
     }
 
-    public static String PrintEndangered(Queue queue) {
-        String out = "";
-        ENDANGEREDSIGHTING es;
-        Queue tempQueue = new Queue();
-        
-        if (queue.isEmpty())
-            out += "No data found";
-        else {
-            while (!queue.isEmpty()) {
-                es = (ENDANGEREDSIGHTING) queue.dequeue();
-                out += es.toString();
-                tempQueue.enqueue(es);
-            }
-            
-            // Restore original queue
-            while (!tempQueue.isEmpty()) {
-                queue.enqueue(tempQueue.dequeue());
-            }
-        }
-        return out;
-    }
+   
 
-    static void sortByNameENDANGERED(Queue queue) {
-        if (queue.isEmpty()) {
-            System.out.println("No data to sort.");
-            return;
-        }
-
-        ArrayList<ENDANGEREDSIGHTING> tempList = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            tempList.add((ENDANGEREDSIGHTING) queue.dequeue());
-        }
-
-        // Bubble sort based on species name
-        for (int i = 0; i < tempList.size() - 1; i++) {
-            for (int j = 0; j < tempList.size() - i - 1; j++) {
-                String name1 = tempList.get(j).getSpeciesName();
-                String name2 = tempList.get(j + 1).getSpeciesName();
-
-                if (name1.compareToIgnoreCase(name2) > 0) {
-                    // Swap
-                    ENDANGEREDSIGHTING temp = tempList.get(j);
-                    tempList.set(j, tempList.get(j + 1));
-                    tempList.set(j + 1, temp);
-                }
-            }
-        }
-
-        // Rebuild the queue with sorted items
-        for (ENDANGEREDSIGHTING es : tempList) {
-            queue.enqueue(es);
-        }
-
-        System.out.println("Species sorted alphabetically by name.");
-    }
+  
 }
